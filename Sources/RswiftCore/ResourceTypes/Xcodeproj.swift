@@ -36,6 +36,21 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
     self.projectFile = projectFile
   }
+    
+    func sourceFiles(_ targetName: String) throws -> [Path] {
+        // Look for target in project file
+        let allTargets = projectFile.project.targets.compactMap { $0.value }
+        guard let target = allTargets.filter({ $0.name == targetName }).first else {
+            let availableTargets = allTargets.compactMap { $0.name }.joined(separator: ", ")
+            throw ResourceParsingError.parsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
+        }
+        
+        return target.buildPhases
+            .compactMap { $0.value as? PBXSourcesBuildPhase }
+            .flatMap { $0.files }
+            .compactMap { $0.value?.fileRef?.value as? PBXFileReference }
+            .compactMap { $0.fullPath }
+    }
 
   func resourcePathsForTarget(_ targetName: String) throws -> [Path] {
     // Look for target in project file
