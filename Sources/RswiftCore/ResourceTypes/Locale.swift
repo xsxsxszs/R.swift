@@ -63,18 +63,18 @@ extension Locale {
 }
 
 extension Locale: Hashable {
-  var hashValue: Int {
-    switch self {
-    case .none:
-      return 0
-
-    case .base:
-      return 1
-
-    case .language(let language):
-      return 2 &+ language.hashValue
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .none:
+            hasher.combine(0)
+            
+        case .base:
+            hasher.combine(1)
+            
+        case .language(let language):
+            hasher.combine(2 &+ language.hashValue)
+        }
     }
-  }
 }
 
 func ==(lhs: Locale, rhs: Locale) -> Bool {

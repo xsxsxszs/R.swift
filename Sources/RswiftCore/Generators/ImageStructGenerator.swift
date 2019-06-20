@@ -54,7 +54,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
           isStatic: true,
           name: SwiftIdentifier(name: name),
           typeDefinition: .inferred(Type.ImageResource),
-          value: "Rswift.ImageResource(bundle: R.hostingBundle, name: \"\(name)\")"
+          value: "ImageResource(bundle: R.hostingBundle, name: \"\(name)\")"
         )
     }
 

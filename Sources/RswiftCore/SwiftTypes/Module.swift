@@ -24,7 +24,15 @@ public enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashabl
     case let .custom(name: name): return name.hashValue
     }
   }
-
+    
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case .host: hasher.combine("--HOSTINGBUNDLE")
+        case .stdLib: hasher.combine("--STDLIB")
+        case let .custom(name: name): return hasher.combine(name)
+        }
+    }
+    
   public var description: String {
     switch self {
     case .host: return ""

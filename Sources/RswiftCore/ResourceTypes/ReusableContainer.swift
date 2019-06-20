@@ -13,9 +13,9 @@ struct Reusable: Hashable {
   let identifier: String
   let type: Type
 
-  var hashValue: Int {
-    return "\(identifier)|\(type)".hashValue
-  }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine("\(identifier)|\(type)")
+    }
 }
 
 func ==(lhs: Reusable, rhs: Reusable) -> Bool {

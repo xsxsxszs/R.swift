@@ -46,20 +46,20 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _CGFloat = Type(module: .stdLib, name: "CGFloat")
   static let _CVarArgType = Type(module: .stdLib, name: "CVarArgType...")
 
-  static let ReuseIdentifier = Type(module: "PDFoundation", name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
-  static let ReuseIdentifierType = Type(module: "PDFoundation", name: "ReuseIdentifierType")
-  static let StoryboardResourceType = Type(module: "PDFoundation", name: "StoryboardResourceType")
-  static let StoryboardResourceWithInitialControllerType = Type(module: "PDFoundation", name: "StoryboardResourceWithInitialControllerType")
-  static let StoryboardViewControllerResource = Type(module: "PDFoundation", name: "StoryboardViewControllerResource")
-  static let NibResourceType = Type(module: "PDFoundation", name: "NibResourceType")
-  static let FileResource = Type(module: "PDFoundation", name: "FileResource")
-  static let FontResource = Type(module: "PDFoundation", name: "FontResource")
-  static let ColorResource = Type(module: "PDFoundation", name: "ColorResource")
-  static let ImageResource = Type(module: "PDFoundation", name: "ImageResource")
-  static let StringResource = Type(module: "PDFoundation", name: "StringResource")
-  static let Strings = Type(module: "PDFoundation", name: "Strings")
-  static let Validatable = Type(module: "PDFoundation", name: "Validatable")
-  static let TypedStoryboardSegueInfo = Type(module: "PDFoundation", name: "TypedStoryboardSegueInfo", genericArgs: [TypeVar(description: "Segue", usedTypes: []), TypeVar(description: "Source", usedTypes: []), TypeVar(description: "Destination", usedTypes: [])])
+  static let ReuseIdentifier = Type(module: .host, name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
+  static let ReuseIdentifierType = Type(module: .host, name: "ReuseIdentifierType")
+  static let StoryboardResourceType = Type(module: .host, name: "StoryboardResourceType")
+  static let StoryboardResourceWithInitialControllerType = Type(module: .host, name: "StoryboardResourceWithInitialControllerType")
+  static let StoryboardViewControllerResource = Type(module: .host, name: "StoryboardViewControllerResource")
+  static let NibResourceType = Type(module: .host, name: "NibResourceType")
+  static let FileResource = Type(module: .host, name: "FileResource")
+  static let FontResource = Type(module: .host, name: "FontResource")
+  static let ColorResource = Type(module: .host, name: "ColorResource")
+  static let ImageResource = Type(module: .host, name: "ImageResource")
+  static let StringResource = Type(module: .host, name: "StringResource")
+  static let Strings = Type(module: .host, name: "Strings")
+  static let Validatable = Type(module: .host, name: "Validatable")
+  static let TypedStoryboardSegueInfo = Type(module: .host, name: "TypedStoryboardSegueInfo", genericArgs: [TypeVar(description: "Segue", usedTypes: []), TypeVar(description: "Source", usedTypes: []), TypeVar(description: "Destination", usedTypes: [])])
 
   let module: Module
   let name: SwiftIdentifier
@@ -74,10 +74,10 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
     return TypePrinter(type: self).swiftCode
   }
 
-  var hashValue: Int {
-    return description.hashValue
-  }
-
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(description)
+    }
+    
   init(module: Module, name: SwiftIdentifier, genericArgs: [TypeVar] = [], optional: Bool = false) {
     self.module = module
     self.name = name
