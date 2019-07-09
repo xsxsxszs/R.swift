@@ -54,8 +54,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
       return ""
     }
     let availablesString = availables.map { "@available(\($0))\n" }.joined(separator: "")
-    let accessModifierString = accessModifier.swiftCode
-    let staticString = isStatic ? "static " : ""
+    let staticString = isStatic ? "public static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
 
     let objcParams = parameters.filter { $0.type != Type._Void }
@@ -91,8 +90,8 @@ struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
     let commentsStringAllParams = bodyStringAllParams.replacingOccurrences(of: "return", with: "//")
     let commentsStringRequiredParams = bodyStringRequiredParams.replacingOccurrences(of: "return", with: "//")
     
-    let requiredParamsFunction = "\(commentsStringRequiredParams)\n\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(requiredParameterString))\(throwString)\(returnString) {\n\(bodyStringRequiredParams.indent(with: "  "))\n}"
-    let allParamsFunction = "\(commentsStringAllParams)\n\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(allParameterString))\(throwString)\(returnString) {\n\(bodyStringAllParams.indent(with: "  "))\n}"
+    let requiredParamsFunction = "\(commentsStringRequiredParams)\n\(availablesString)\(staticString)func \(functionName)\(genericsString)(\(requiredParameterString))\(throwString)\(returnString) {\n\(bodyStringRequiredParams.indent(with: "  "))\n}"
+    let allParamsFunction = "\(commentsStringAllParams)\n\(availablesString)\(staticString)func \(functionName)\(genericsString)(\(allParameterString))\(throwString)\(returnString) {\n\(bodyStringAllParams.indent(with: "  "))\n}"
     if shouldHaveShortenedFunction {
       return "\(requiredParamsFunction)\n\n\(allParamsFunction)\n"
     } else {
