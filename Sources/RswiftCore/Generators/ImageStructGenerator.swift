@@ -45,28 +45,17 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
       .filter { !$0.isEmpty }
 
-    let imageLets = groupedFunctions
-      .uniques
-      .map { name in
-        Let(
-          comments: ["Image `\(name)`."],
-          accessModifier: externalAccessLevel,
-          isStatic: true,
-          name: SwiftIdentifier(name: name),
-          typeDefinition: .inferred(Type.ImageResource),
-          value: "ImageResource(bundle: R.hostingBundle, name: \"\(name)\")"
-        )
-    }
+    let functions = groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) }
 
     return Struct(
       availables: [],
-      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(imageLets.count) images."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(functions.count) images."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: imageLets,
-      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
+      properties: [],
+      functions: functions,
       structs: structs,
       classes: []
     )
@@ -74,7 +63,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 
   private func imageFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
     let structName = SwiftIdentifier(name: name)
-    let qualifiedName = prefix + structName
+    let qualifiedName = "ImageResource(bundle: R.hostingBundle, name: \"\(structName)\")"
 
     return Function(
       availables: [],

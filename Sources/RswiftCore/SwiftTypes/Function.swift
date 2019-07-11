@@ -58,14 +58,6 @@ struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
     let genericsString = generics.map { "<\($0)>" } ?? ""
 
     let objcParams = parameters.filter { $0.type != Type._Void }
-    
-    let allParameterString = objcParams.map { $0.descriptionWithoutDefaultValue }.joined(separator: ", ")
-    let allParameterInjection = objcParams
-      .map {
-        let argName = ($0.name == "_") ? "" : "\($0.name): "
-        return "\(argName)\($0.localName ?? $0.name)"
-      }
-      .joined(separator: ", ")
 
     // Required if the param is not optional, or there isn't a default value.
     let requiredParams = objcParams.filter { !$0.type.optional || $0.defaultValue == nil }
@@ -77,26 +69,18 @@ struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
       }
       .joined(separator: ", ")
     
-    let shouldHaveShortenedFunction = requiredParams.count != objcParams.count
     
     let throwString = doesThrow ? " throws" : ""
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
-    let bodyStringAllParams = "return \(prefix).\(name)(\(allParameterInjection))"
     let bodyStringRequiredParams = "return \(prefix).\(name)(\(requiredParameterInjection))"
     let functionName = "\(prefix)_\(name)"
       .replacingOccurrences(of: ".", with: "_")
       .replacingOccurrences(of: "R_", with: "")
     
-    let commentsStringAllParams = bodyStringAllParams.replacingOccurrences(of: "return", with: "//")
     let commentsStringRequiredParams = bodyStringRequiredParams.replacingOccurrences(of: "return", with: "//")
     
     let requiredParamsFunction = "\(commentsStringRequiredParams)\n\(availablesString)\(staticString)func \(functionName)\(genericsString)(\(requiredParameterString))\(throwString)\(returnString) {\n\(bodyStringRequiredParams.indent(with: "  "))\n}"
-    let allParamsFunction = "\(commentsStringAllParams)\n\(availablesString)\(staticString)func \(functionName)\(genericsString)(\(allParameterString))\(throwString)\(returnString) {\n\(bodyStringAllParams.indent(with: "  "))\n}"
-    if shouldHaveShortenedFunction {
-      return "\(requiredParamsFunction)\n\n\(allParamsFunction)\n"
-    } else {
-      return "\(allParamsFunction)\n"
-    }
+    return "\(requiredParamsFunction)\n"
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {
