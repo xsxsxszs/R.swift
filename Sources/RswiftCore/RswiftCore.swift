@@ -44,8 +44,7 @@ public struct RswiftCore {
             extractFrom: [externalStruct, internalStruct],
             exclude: [Module.custom(name: callInformation.productModuleName)]
           ),
-          externalStruct,
-          internalStruct
+          externalStruct
         ]
         
         let objcConvertibles: [ObjcCodeConvertible] = [

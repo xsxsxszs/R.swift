@@ -57,7 +57,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: params.map { stringLet(values: $0, at: externalAccessLevel) },
+      properties: [],
       functions: params.map { stringFunction(values: $0, at: externalAccessLevel) },
       structs: [],
       classes: []
