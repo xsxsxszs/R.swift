@@ -16,7 +16,6 @@ struct ObjcHeaderPrinter: ObjcCodeConvertible {
             "// Compatibility layer so resources can be used in ObjC",
             "//",
             "@objcMembers",
-            "@available(swift, obsoleted: 1.0, message: \"Use R. instead\")",
             "public class \(productModuleName)RObjc: Foundation.NSObject {",
             "",
         ].joined(separator: "\n")
@@ -29,6 +28,7 @@ struct ObjcFooterPrinter: ObjcCodeConvertible {
         return [
             "  fileprivate override init() {}",
             "}",
+            "",
         ].joined(separator: "\n")
     }
 }

@@ -44,13 +44,15 @@ public struct RswiftCore {
             extractFrom: [externalStruct, internalStruct],
             exclude: [Module.custom(name: callInformation.productModuleName)]
           ),
-          externalStruct
+          externalStruct,
+          ExtensionPrinter()
         ]
         
         let objcConvertibles: [ObjcCodeConvertible] = [
             ObjcHeaderPrinter(),
             externalStruct,
             ObjcFooterPrinter(),
+            ExtensionPrinter()
         ]
 
       var fileContents = codeConvertibles
