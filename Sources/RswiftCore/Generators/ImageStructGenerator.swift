@@ -63,7 +63,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 
   private func imageFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
     let structName = SwiftIdentifier(name: name)
-    let qualifiedName = "ImageResource(bundle: R.hostingBundle, name: \"\(structName)\")"
+    let qualifiedName = "ImageResource(bundle: R.hostingBundle, name: \"\(name)\")"
 
     return Function(
       availables: [],
